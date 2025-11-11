@@ -1,3 +1,8 @@
+{{--toma los parametros de dashboard--}}
+@props([
+    'title' => config('app.name', 'Laravel'),
+    'breadcrumbs'=>[]])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -5,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,6 +20,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <script src="https://kit.fontawesome.com/e1f6e2f15a.js" crossorigin="anonymous"></script>
+        {{-- Sweet Alert 2--}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <wireui:scripts />
 
         <!-- Styles -->
         @livewireStyles
@@ -29,13 +37,21 @@
 
     <div class="p-4 sm:ml-64">
 
-        <div class="mt-14">
-            {{$slot}}
+        <div class="mt-14 flex itmems-center justify-between w-full">
+           @include('layouts.includes.admin.breadcrumb')
         </div>
+         {{$slot}}
     </div>
         @stack('modals')
 
         @livewireScripts
             <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    
+    {{-- mostrar Sweet Alert--}}
+    @if(session('swal'))
+        <script>
+            Swal.fire(@json(session('swal')));
+        </script>
+    @endif
     </body>
 </html>

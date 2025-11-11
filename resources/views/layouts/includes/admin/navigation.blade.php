@@ -9,7 +9,11 @@
                         </svg>
                     </button>
                     <a href="/" class="flex ms-2 md:me-24">
+<<<<<<< HEAD
                     <img src="{{ asset('images/carita.jpg') }}" class="h-8 me-3" alt="FlowBite Logo" />
+=======
+                    <img src="{{ asset('images/logo.jpg') }}" class="h-8 me-3" alt="FlowBite Logo" />
+>>>>>>> 016aad280f8d75570ebafbd0002f93bcf2a4e300
                     <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Simify</span>
                     </a>
                 </div>
@@ -70,4 +74,8 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
         </nav>
+=======
+        </nav>
+>>>>>>> 016aad280f8d75570ebafbd0002f93bcf2a4e300
