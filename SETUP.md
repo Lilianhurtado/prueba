@@ -197,6 +197,98 @@ composer test
 
 ---
 
+## 🔄 Resetear Base de Datos (Empezar de Cero)
+
+### Opción 1: Con SQLite (Base de datos por defecto)
+
+Si usas SQLite y quieres empezar de cero:
+
+```bash
+# Eliminar el archivo de base de datos
+rm database/database.sqlite
+
+# Crear nuevo archivo vacío
+touch database/database.sqlite
+
+# Ejecutar migraciones y seeders desde cero
+php artisan migrate:fresh --seed
+```
+
+### Opción 2: Con MySQL/MariaDB (phpMyAdmin)
+
+Si ya tienes una base de datos MySQL creada con phpMyAdmin:
+
+#### Método A: Resetear tablas sin eliminar la BD (Recomendado)
+
+```bash
+# Este comando elimina todas las tablas y las vuelve a crear con datos frescos
+php artisan migrate:fresh --seed
+```
+
+⚠️ **ADVERTENCIA:** Este comando **ELIMINA TODOS LOS DATOS** de todas las tablas.
+
+#### Método B: Eliminar y recrear la BD completa
+
+**Paso 1:** Eliminar la base de datos desde phpMyAdmin:
+
+1. Accede a phpMyAdmin
+2. Selecciona tu base de datos
+3. Click en "Operaciones" → "Eliminar base de datos"
+4. Confirma la eliminación
+
+**Paso 2:** Crear nueva base de datos:
+
+1. Click en "Nueva" en el panel izquierdo
+2. Nombre de base de datos: `nombre_tu_bd`
+3. Cotejamiento: `utf8mb4_unicode_ci`
+4. Click en "Crear"
+
+**Paso 3:** Actualizar archivo `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_tu_bd
+DB_USERNAME=root
+DB_PASSWORD=tu_password
+```
+
+**Paso 4:** Ejecutar migraciones y seeders:
+
+```bash
+# Limpiar caché de configuración
+php artisan config:clear
+
+# Ejecutar migraciones con seeders
+php artisan migrate --seed
+```
+
+### Comandos Relacionados
+
+```bash
+# Solo eliminar datos de las tablas (mantiene estructura)
+php artisan db:wipe
+
+# Ver estado de migraciones
+php artisan migrate:status
+
+# Revertir última migración
+php artisan migrate:rollback
+
+# Revertir todas las migraciones
+php artisan migrate:reset
+```
+
+### ⚠️ Importante
+
+-   `migrate:fresh` elimina **TODAS LAS TABLAS** y las recrea
+-   `migrate:fresh --seed` además ejecuta los seeders para poblar datos iniciales
+-   Siempre haz backup de tu base de datos antes de resetear
+-   En producción **NUNCA** uses `migrate:fresh`
+
+---
+
 ## 🏗️ Stack Tecnológico
 
 -   **Framework:** Laravel 12.28.1

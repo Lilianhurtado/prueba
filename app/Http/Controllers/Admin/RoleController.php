@@ -61,27 +61,89 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Role $role)
     {
-        return view('admin.roles.edit');
+        // Restricción: no permitir editar los primeros 4 roles base
+        if ($role->id <= 4) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Acción no permitida',
+                'text' => 'No se pueden editar los roles base del sistema.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
 
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        // Restricción: no permitir actualizar los primeros 4 roles base
+        if ($role->id <= 4) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Acción no permitida',
+                'text' => 'No se pueden modificar los roles base del sistema.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
+
+        // Validar con regla unique excluyendo el registro actual
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $role->id
+        ]);
+
+        // Detectar si no hubo cambios
+        if ($role->name === $request->name) {
+            session()->flash('swal', [
+                'icon' => 'info',
+                'title' => 'Sin cambios',
+                'text' => 'No se realizaron cambios en el rol.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
+
+        // Actualizar el rol
+        $role->update(['name' => $request->name]);
+
+        // Mensaje de éxito
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol actualizado',
+            'text' => 'El rol se ha actualizado correctamente.'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Role $role)
     {
-        //
-    }
+        // Restricción: no permitir eliminar los primeros 4 roles base
+        if ($role->id <= 4) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Acción no permitida',
+                'text' => 'No se pueden eliminar los roles base del sistema.'
+            ]);
+            return redirect()->route('admin.roles.index');
+        }
 
-    
+        // Eliminar el rol
+        $role->delete();
+
+        // Mensaje de éxito
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol eliminado',
+            'text' => 'El rol se ha eliminado correctamente.'
+        ]);
+
+        return redirect()->route('admin.roles.index');
+    }
 }
