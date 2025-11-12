@@ -81,5 +81,7 @@
             });
         });
     </script>
+    {{-- Stack para scripts específicos de vistas (ej. confirmDelete en roles) --}}
+    @stack('scripts')
     </body>
 </html>

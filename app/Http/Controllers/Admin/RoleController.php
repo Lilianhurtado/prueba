@@ -63,16 +63,6 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        // Restricción: no permitir editar los primeros 4 roles base
-        if ($role->id <= 4) {
-            session()->flash('swal', [
-                'icon' => 'error',
-                'title' => 'Acción no permitida',
-                'text' => 'No se pueden editar los roles base del sistema.'
-            ]);
-            return redirect()->route('admin.roles.index');
-        }
-
         return view('admin.roles.edit', compact('role'));
     }
 
@@ -81,16 +71,6 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        // Restricción: no permitir actualizar los primeros 4 roles base
-        if ($role->id <= 4) {
-            session()->flash('swal', [
-                'icon' => 'error',
-                'title' => 'Acción no permitida',
-                'text' => 'No se pueden modificar los roles base del sistema.'
-            ]);
-            return redirect()->route('admin.roles.index');
-        }
-
         // Validar con regla unique excluyendo el registro actual
         $request->validate([
             'name' => 'required|unique:roles,name,' . $role->id
@@ -124,16 +104,6 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        // Restricción: no permitir eliminar los primeros 4 roles base
-        if ($role->id <= 4) {
-            session()->flash('swal', [
-                'icon' => 'error',
-                'title' => 'Acción no permitida',
-                'text' => 'No se pueden eliminar los roles base del sistema.'
-            ]);
-            return redirect()->route('admin.roles.index');
-        }
-
         // Eliminar el rol
         $role->delete();
 
